@@ -5,8 +5,7 @@ function box_office() {
                                                                              // toString => 여기선 숫자타입을 문자타입으로 변환, split => '-' 기준 으로 쪼개줌
     var my_date = my_str[0] + my_str[1] + my_str[2]
 
-
-
+    /************************************* 영화진흥위원회 API 불러오기 *****************************************/
     $.ajax({
         async : true,   // 동기(synchronous), False
                         // : 응답을 받아야만 다음 동작을 실행
@@ -21,7 +20,7 @@ function box_office() {
         dataType : "json",
         success : function (result) {
 
-            $("tbody").empty()
+            $("tbody").empty()              // 화면에 있는 tbody 라는 태그를 찾아서 비워주기
             // var tmp = result["boxOfficeResult"]["dailyBoxOfficeList"]
             movie_list = result.boxOfficeResult.dailyBoxOfficeList
 
@@ -30,11 +29,11 @@ function box_office() {
                 var tr = $("<tr></tr>")
                 var rankTd = $("<td></td>").text(item.rank)
                 var posterTd = $("<td></td>")
-
-                /*********************************** 다음 이미지 API 불러오기 *************************************/
-
                 var posterImg = $("<img />").attr("src",
                       // 보통 이미지 소스에 링크를 넣지만, ajax 사용 하기 위해 함수 리턴값을 받는다.
+
+                       /****************************** 다음 이미지 API 불러오기 ***********************************/
+
                        function() {
                            var my_url = " "
 
@@ -68,11 +67,12 @@ function box_office() {
                            return  my_url
 
                        } // end of function
+
+                      /*********************************** 다음 이미지 API 끝 ***********************************/
+
                 ).attr("width", "150px").attr("height", "150px")
 
                 posterTd.append(posterImg)
-
-                /*********************************** 다음 API 끝 *************************************/
 
                 var movieNmTd = $("<td></td>").text(item.movieNm)
                 var salesAccTd = $("<td></td>").text(item.salesAcc)
@@ -135,27 +135,22 @@ function box_office() {
                 viewTd.append(viewBtn)
 
                 tr.append(rankTd)
-
-                // tr.append(imgTd)
-
-                // posterTd.append(posterImg)
                 tr.append(posterTd)
-
                 tr.append(movieNmTd)
                 tr.append(salesAccTd)
                 tr.append(audiAccTd)
-
                 tr.append(viewTd)
 
 
                 $("tbody").append(tr)
-            })
+
+            }) // end of each
         }, // end of success
 
         error : function (error) {
             // alert("서버 호출 실패!!")
-        }
+        } // end of error
 
     }) // end of ajax
-     // end of if
-}
+    /************************************* 영화진흥위원회 API 끝 ********************************************/
+} // end of box_office
